@@ -26,6 +26,7 @@ function csvToGeoJSON(fileUrl, callback) {
                         if (coordinates.length === 2) {
                             // 将字符串转换为数组
                             const streetviewImgNames = row['streetview_img_names'] ? row['streetview_img_names'].split(', ') : [];
+                            const streetViewImageCaptions = row['streetview_img_captions'] ? row['streetview_img_captions'].split(', \n') : [];
 
                             const feature = {
                                 type: 'Feature',
@@ -38,7 +39,8 @@ function csvToGeoJSON(fileUrl, callback) {
                                     population: parseInt(row['population (unit)']),
                                     gdp: parseFloat(row['gdp (million yuan)']),
                                     caption: row['caption'],
-                                    streetview_img_names: streetviewImgNames
+                                    streetview_img_names: streetviewImgNames,
+                                    streetview_img_captions: streetViewImageCaptions
                                 }
                             };
                             geojson.features.push(feature);
@@ -118,7 +120,8 @@ function fetchDataForLocation(lngLat, station, callback) {
         population: station.properties.population,
         gdp: station.properties.gdp,
         caption: station.properties.caption,
-        streetview_img_names: station.properties.streetview_img_names
+        streetview_img_names: station.properties.streetview_img_names,
+        streetview_img_captions: station.properties.streetview_img_captions
     };
     callback(data);
 }
@@ -193,13 +196,25 @@ function generatePopupContent(data, lnglat) {
     const population = data.population.toFixed(0); // 保留零位小数
     const gdp = data.gdp.toFixed(2); // 保留两位小数
     const caption = data.caption
-    const streetViewImages = data.streetview_img_names
+    const streetViewImageNames = data.streetview_img_names
+    const streetViewImageCaptions = data.streetview_img_captions
 
     // Build the HTML for street view images
     let imagesHtml = '<div class="street-view-images"><div class="swiper-container"><div class="swiper-wrapper">';
-    if (streetViewImages.length > 0) {
-        streetViewImages.forEach(url => {
-            imagesHtml += `<div class="swiper-slide"><img src="http://111.230.109.230:9666/${url}" alt="Street View"></div>`;
+    if (streetViewImageNames.length > 0) {
+        streetViewImageNames.forEach((url, index) => {
+            const imageDescription = streetViewImageCaptions[index] || 'No description available.';
+            // Truncate the description if it's too long
+            const maxLength = 180; // Max characters to display
+            const truncatedDescription = imageDescription.length > maxLength
+                ? imageDescription.substring(0, maxLength) + '...'
+                : imageDescription;
+            imagesHtml += `
+            <div class="swiper-slide">
+                <img src="http://111.230.109.230:9666/${url}" alt="Street View">
+                <div class="image-description" title="${imageDescription}">${truncatedDescription}</div>
+            </div>
+        `;
         });
     } else {
         imagesHtml = '<p>No street view images available.</p>';
@@ -209,7 +224,7 @@ function generatePopupContent(data, lnglat) {
     const content = `
     <div class="popup-content">
         <div class="popup-header">
-            Region #1254, Beijing (<u>with ${streetViewImages.length} street-view images</u>).
+            Region #1254, Beijing (<u>with ${streetViewImageNames.length} street-view images</u>).
         </div>
         <div class="popup-street-view">
             ${imagesHtml}

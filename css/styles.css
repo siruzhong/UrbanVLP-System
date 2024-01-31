@@ -3428,13 +3428,13 @@ strong {
 
 .popup-header {
     font-weight: bold;
-    font-size: 16px;  /* 减小字体大小以融入整体设计 */
-    color: #333;  /* 深色以融入整体设计 */
+    font-size: 16px; /* 减小字体大小以融入整体设计 */
+    color: #333; /* 深色以融入整体设计 */
     margin-bottom: 12px;
-    background-color: #f6f6f6;  /* 淡色背景 */
-    padding: 4px 10px;  /* 适当的内部间距 */
-    border-radius: 3px;  /* 微弱的圆角 */
-    display: inline-block;  /* 使背景色只包围文本 */
+    background-color: #f6f6f6; /* 淡色背景 */
+    padding: 4px 10px; /* 适当的内部间距 */
+    border-radius: 3px; /* 微弱的圆角 */
+    display: inline-block; /* 使背景色只包围文本 */
 }
 
 /* 添加自定义样式以覆盖 Swiper 的默认样式 */
@@ -3447,6 +3447,7 @@ strong {
     text-align: center;
     font-size: 18px;
     background: #fff;
+    position: relative; /* Set the position context for the description */
 
     /* Center slide text vertically */
     display: -webkit-box;
@@ -3464,11 +3465,22 @@ strong {
 }
 
 .swiper-slide img {
-    width: auto; /* 或者 '100%' 如果你希望宽度充满容器 */
-    /*height: 100%; !* 根据容器调整，但可能会导致图片不按比例缩放 *!*/
-    max-width: 100%; /* 确保图片不超过容器宽度 */
-    max-height: 100%; /* 确保图片不超过容器高度 */
-    object-fit: contain; /* 保持图片比例，可能会导致图片不填满整个容器 */
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove any extra space below the image */
 }
 
-/* 如果需要，可以添加更多的自定义样式 */
+.image-description {
+    width: 100%; /* 描述宽度与图片一致 */
+    padding: 5px; /* 或你想要的任何填充 */
+    background: rgba(0, 0, 0, 0.9); /* 半透明背景 */
+    color: white;
+    font-size: 14px;
+    /*position: absolute; !* 位置设置为绝对，相对于 .swiper-slide 定位 *!*/
+    bottom: 0; /* 底部对齐 */
+    left: 0; /* 左侧对齐 */
+    word-wrap: break-word; /* 允许单词在必要时断行 */
+    white-space: normal; /* 允许空白处正常换行 */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    text-overflow: ellipsis; /* 显示省略号来表示被截断的文本 */
+}
