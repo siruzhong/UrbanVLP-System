@@ -128,6 +128,8 @@ function fetchDataForLocation(lngLat, station, callback) {
 
 let boundarySourceId = null; // 用于存储边界数据源的ID
 let boundaryLayerId = null;   // 用于存储边界图层的ID
+let maskLayerId = null;
+
 function generateClickBoundary(station) {
     const stationLng = station.geometry.coordinates[0];
     const stationLat = station.geometry.coordinates[1];
@@ -143,9 +145,10 @@ function generateClickBoundary(station) {
     ];
 
     // 如果之前有添加过边界，先删除它
-    if (boundarySourceId && boundaryLayerId) {
+    if (boundarySourceId && boundaryLayerId && maskLayerId) {
         map.removeLayer(boundaryLayerId);
         map.removeSource(boundarySourceId);
+        map.removeLayer(maskLayerId);
     }
 
     // 创建一个 GeoJSON 数据对象表示边界
@@ -165,9 +168,27 @@ function generateClickBoundary(station) {
         }
     };
 
-    // 添加一个新的数据源和图层来显示边界
-    boundarySourceId = 'boundary-source-' + new Date().getTime(); // 为数据源生成唯一ID
-    boundaryLayerId = 'boundary-layer-' + new Date().getTime();     // 为图层生成唯一ID
+    // 边界以外区域的GeoJSON对象，作为遮罩
+    const maskGeoJSON = {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': [[
+                [-180, -90],
+                [-180, 90],
+                [180, 90],
+                [180, -90],
+                [-180, -90]
+            ], boundaryGeoJSON.geometry.coordinates[0]] // The hole is the boundary
+        }
+    };
+
+    // 为数据源和图层生成唯一ID
+    const timestamp = new Date().getTime();
+    boundarySourceId = 'boundary-source-' + timestamp;
+    boundaryLayerId = 'boundary-layer-' + timestamp;
+    maskLayerId = 'mask-layer-' + timestamp;
+
     // 添加一个新的数据源和图层来显示边界
     map.addSource(boundarySourceId, {
         'type': 'geojson',
@@ -187,6 +208,23 @@ function generateClickBoundary(station) {
             // Removed line-dasharray for a solid line
         }
     });
+
+    // 添加一个新的数据源和图层来显示边界外的暗色遮罩
+    map.addSource('mask-source-' + timestamp, {
+        'type': 'geojson',
+        'data': maskGeoJSON
+    });
+
+    map.addLayer({
+        'id': maskLayerId,
+        'type': 'fill',
+        'source': 'mask-source-' + timestamp,
+        'layout': {},
+        'paint': {
+            'fill-color': '#000000',
+            'fill-opacity': 0.5
+        }
+    }, boundaryLayerId); // 确保遮罩层在边界层下方
 
 }
 
