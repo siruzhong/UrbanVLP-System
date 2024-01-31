@@ -24,6 +24,9 @@ function csvToGeoJSON(fileUrl, callback) {
                             .map(parseFloat);
 
                         if (coordinates.length === 2) {
+                            // 将字符串转换为数组
+                            const streetviewImgNames = row['streetview_img_names'] ? row['streetview_img_names'].split(', ') : [];
+
                             const feature = {
                                 type: 'Feature',
                                 geometry: {
@@ -34,7 +37,8 @@ function csvToGeoJSON(fileUrl, callback) {
                                     carbon_emissions: parseFloat(row['carbon_emissions (ton)']),
                                     population: parseInt(row['population (unit)']),
                                     gdp: parseFloat(row['gdp (million yuan)']),
-                                    caption: row['caption']
+                                    caption: row['caption'],
+                                    streetview_img_names: streetviewImgNames
                                 }
                             };
                             geojson.features.push(feature);
@@ -56,7 +60,7 @@ function csvToGeoJSON(fileUrl, callback) {
 // 添加站点数据图层
 function addStationsLayer() {
     // 将CSV数据转换为GeoJSON
-    csvToGeoJSON('./data/integrated_satellite_data_with_captions.csv', (error, geojsonData) => {
+    csvToGeoJSON('./data/integrated_all.csv', (error, geojsonData) => {
         if (error) {
             console.error('Error:', error);
         } else {
@@ -113,7 +117,8 @@ function fetchDataForLocation(lngLat, station, callback) {
         carbon_emissions: station.properties.carbon_emissions,
         population: station.properties.population,
         gdp: station.properties.gdp,
-        caption: station.properties.caption
+        caption: station.properties.caption,
+        streetview_img_names: station.properties.streetview_img_names
     };
     callback(data);
 }
@@ -188,14 +193,14 @@ function generatePopupContent(data, lnglat) {
     const population = data.population.toFixed(0); // 保留零位小数
     const gdp = data.gdp.toFixed(2); // 保留两位小数
     const caption = data.caption
+    const streetViewImages = data.streetview_img_names
 
-    streetViewImages = ["http://111.230.109.230:9666/50877_116.449111,40.09969_201308_280.06.jpg", "http://111.230.109.230:9666/50870_116.452766,40.097876_201308_29.46.jpg"]
     // Build the HTML for street view images
     let imagesHtml = '';
     if (streetViewImages.length > 0) {
         imagesHtml = '<div class="street-view-images">';
         streetViewImages.forEach(url => {
-            imagesHtml += `<img src="${url}" alt="Street View" class="popup-street-view-image">`;
+            imagesHtml += `<img src="http://111.230.109.230:9666/${url}" alt="Street View" class="popup-street-view-image">`;
         });
         imagesHtml += '</div>';
     } else {
@@ -205,10 +210,9 @@ function generatePopupContent(data, lnglat) {
     const content = `
     <div class="popup-content">
         <div class="popup-header">
-            Region #1254, Beijing
+            Region #1254, Beijing (<u>with ${streetViewImages.length} street-view images</u>).
         </div>
        <div class="popup-street-view">
-            <h4>Street View Images</h4>
             ${imagesHtml}
         </div>
         <div class="data">
