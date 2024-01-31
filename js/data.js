@@ -79,7 +79,7 @@ function addStationsLayer() {
                 source: 'stations',
                 paint: {
                     'circle-radius': 5,
-                    'circle-color': 'rgb(248,19,19)',
+                    'circle-color': 'rgb(30,144,255)',
                     'circle-stroke-color': 'white',
                     'circle-stroke-width': 1
                 },
@@ -174,20 +174,20 @@ function generateClickBoundary(station) {
         'data': boundaryGeoJSON
     });
 
-    // 添加图层来显示边界
     map.addLayer({
         'id': boundaryLayerId,
         'type': 'line',
         'source': boundarySourceId,
         'layout': {},
         'paint': {
-            'line-color': '#ff0000',
-            'line-width': 8,   // 增加线宽
-            // 'line-opacity': 1,   // 调整透明度
-            'line-blur': 2,   // 添加模糊效果以模拟阴影
-            // 'line-dasharray': [2, 2]   // 使用虚线
+            'line-color': '#4290dc', // Switch to deep blue color
+            'line-width': 5, // Slightly thinner line
+            'line-opacity': 0.85, // Increase opacity for better visibility
+            'line-blur': 0, // Remove blur for a sharper line
+            // Removed line-dasharray for a solid line
         }
     });
+
 }
 
 
@@ -236,7 +236,7 @@ function generatePopupContent(data, lnglat) {
             const imageDescription = streetViewImageCaptions[index] || 'No description available.';
             const escapedImageDescription = imageDescription.replace(/"/g, '&quot;');
             // Truncate the description if it's too long
-            const maxLength = 180; // Max characters to display
+            const maxLength = 150; // Max characters to display
             const truncatedDescription = imageDescription.length > maxLength
                 ? imageDescription.substring(0, maxLength) + '...'
                 : imageDescription;
@@ -264,39 +264,39 @@ function generatePopupContent(data, lnglat) {
         <div class="data">
             <div class="data-item">
                 <img src="assets/carbon.png" alt="Carbon Emission" class="icon">
-                <strong style="color: green">CO2e: </strong><span style="margin-right: 4px">${carbonEmissions}</span> tons
+                <strong style="color: green; font-size: 16px">CO2e: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} tons</span> 
             </div>
             <div class="data-item">
                 <img src="assets/population.png" alt="Population" class="icon">
-                <strong style="color: purple">Pop: </strong><span style="margin-right: 4px">${population}</span> units
+                <strong style="color: purple; font-size: 16px">Pop: </strong><span style="margin-right: 4px; font-size: 16px">${population} units</span> 
             </div>
             <div class="data-item">
                 <img src="assets/gdp.png" alt="GDP" class="icon">
-                <strong style="color: #0a59d0">GDP: </strong><span style="margin-right: 4px">${gdp}</span> million
+                <strong style="color: #0a59d0; font-size: 16px">GDP: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} million</span> 
             </div>                            
         </div>        
         <div class="data">
             <div class="data-item">
                 <img src="assets/nlight.png" alt="Night Light" class="icon">
-                <strong style="color: #dc9004">NLight: </strong><span style="margin-right: 4px">${carbonEmissions}</span> tons
+                <strong style="color: #dc9004; font-size: 16px">NLight: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} tons</span> 
             </div>
             <div class="data-item">
                 <img src="assets/hprice.png" alt="House Price" class="icon">
-                <strong style="color: #ea4141">HPrice: </strong><span style="margin-right: 4px">${population}</span> units
+                <strong style="color: #ea4141; font-size: 16px">HPrice: </strong><span style="margin-right: 4px; font-size: 16px">${population} units</span> 
             </div>
             <div class="data-item">
                 <img src="assets/poi.png" alt="POI" class="icon">
-                <strong style="color: #894ec2">POI: </strong><span style="margin-right: 4px">${gdp}</span> million
+                <strong style="color: #894ec2; font-size: 16px">POI: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} million</span> 
             </div>                            
         </div>
         <div class="popup-caption">
-            <strong style="color: rgb(229,46,89)">Satellite Image Region Descrption: </strong> ${caption}
+            <strong style="color: rgb(229,46,89); font-size: 16px">Satellite Image Region Descrption: </strong> ${caption}
         </div>
         <p class="popup-description">
             <i class="fas fa-info-circle"></i>
             This is a 1km x 1km region centered around 
             <strong>coordinate (${lnglat.lng.toFixed(3)}&deg;E, ${lnglat.lat.toFixed(3)}&deg;N)</strong>
-            <div id="placesList" style="font-size: 16px; color: #198cff"></div>
+            <div id="placesList" style="font-size: 14px; color: #198cff"></div>
         </p>
     </div>
 `;

@@ -3095,7 +3095,7 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
     padding: 10px 10px 15px;
     position: relative;
     box-shadow: 0 1px 2px #0000001a;
-    width: 720px;
+    width: 620px;
 }
 
 .mapboxgl-popup-anchor-top-left .mapboxgl-popup-content {
@@ -3361,7 +3361,7 @@ strong {
     border-radius: 5px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    width: 700px; /* 或者你需要的宽度 */
+    width: 600px; /* 或者你需要的宽度 */
 }
 
 .popup-street-view-image {
@@ -3397,7 +3397,7 @@ strong {
 }
 
 .popup-description {
-    font-size: 18px;
+    font-size: 15px;
     color: #555;
     margin-bottom: 8px;
 }
@@ -3416,7 +3416,7 @@ strong {
     background-color: #f6f6f6; /* 灰色背景 */
     padding: 8px 10px;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .popup-description i {
@@ -3478,7 +3478,7 @@ strong {
     padding: 5px; /* 或你想要的任何填充 */
     background: rgba(0, 0, 0, 0.9); /* 半透明背景 */
     color: white;
-    font-size: 14px;
+    font-size: 13px;
     /*position: absolute; !* 位置设置为绝对，相对于 .swiper-slide 定位 *!*/
     bottom: 0; /* 底部对齐 */
     left: 0; /* 左侧对齐 */
