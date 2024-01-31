@@ -45,17 +45,18 @@ const coordinatesGeocoder = function (query) {
 };
 
 
-// 将位置搜索框添加到地图
-map.addControl(
-    new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        localGeocoder: coordinatesGeocoder,
-        zoom: 14,
-        placeholder: 'Search here ...',
-        mapboxgl: mapboxgl,
-        reverseGeocode: true
-    })
-);
+// Initialize the geocoder control
+const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    localGeocoder: coordinatesGeocoder,
+    zoom: 4,
+    placeholder: 'location search ...',
+    mapboxgl: mapboxgl,
+    reverseGeocode: true
+});
+
+// Append the geocoder to your header
+document.getElementById('geocoder-container').appendChild(geocoder.onAdd(map));
 
 // 将缩放和旋转控件添加到地图
 map.addControl(new mapboxgl.NavigationControl());

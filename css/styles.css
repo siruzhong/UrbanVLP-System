@@ -1163,7 +1163,6 @@ hr.hr {
 
 .nav__item--active {
     color: #198cff;
-    border-bottom: #3fc2c0 solid 2px;
     font-size: 16px;
     font-weight: bold;
 }
@@ -3297,7 +3296,8 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
 }
 
 .small-logo {
-    width: 300px;
+    width: 240px;
+    margin-top: 10px;
 }
 
 #airQualityLegend {
@@ -3416,6 +3416,7 @@ strong {
     background-color: #f6f6f6; /* 灰色背景 */
     padding: 8px 10px;
     border-radius: 4px;
+    font-size: 18px;
 }
 
 .popup-description i {
@@ -3485,4 +3486,125 @@ strong {
     white-space: normal; /* 允许空白处正常换行 */
     overflow: hidden; /* 隐藏溢出的内容 */
     text-overflow: ellipsis; /* 显示省略号来表示被截断的文本 */
+}
+
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Typography */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+/* Header */
+.header {
+    background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    position: relative;
+    z-index: 1000;
+}
+
+.header-contents {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.header-logo img {
+    max-width: 180px; /* Adjust logo size */
+    height: auto;
+}
+
+/* Navigation Menu */
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+}
+
+.nav__item {
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav__item:hover,
+.nav__item--active {
+    background: #e7e7e7; /* Light grey background on hover/active */
+}
+
+/* Submenu */
+.submenu {
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide by default */
+}
+
+.submenu__item {
+    display: block;
+}
+
+.dropdown:hover .submenu {
+    display: block; /* Show on hover */
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    background: #007bff; /* Bootstrap primary color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #0056b3; /* Darker shade on hover */
+}
+
+/* Map Area */
+#map {
+    height: calc(100vh - 60px); /* Full height minus header */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-contents {
+        flex-direction: column;
+    }
+
+    .nav-list {
+        flex-direction: column;
+    }
+
+    .nav__item {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .btn {
+        margin-top: 10px;
+    }
+}
+
+/* Custom Marker Styles */
+.mapboxgl-marker {
+    background-color: #ff5252; /* Custom marker color */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
 }

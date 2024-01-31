@@ -296,7 +296,7 @@ function generatePopupContent(data, lnglat) {
             <i class="fas fa-info-circle"></i>
             This is a 1km x 1km region centered around 
             <strong>coordinate (${lnglat.lng.toFixed(3)}&deg;E, ${lnglat.lat.toFixed(3)}&deg;N)</strong>
-            <div id="placesList" style="font-size: 18px; color: #198cff"></div>
+            <div id="placesList" style="font-size: 16px; color: #198cff"></div>
         </p>
     </div>
 `;
