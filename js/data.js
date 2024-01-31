@@ -196,23 +196,22 @@ function generatePopupContent(data, lnglat) {
     const streetViewImages = data.streetview_img_names
 
     // Build the HTML for street view images
-    let imagesHtml = '';
+    let imagesHtml = '<div class="street-view-images"><div class="swiper-container"><div class="swiper-wrapper">';
     if (streetViewImages.length > 0) {
-        imagesHtml = '<div class="street-view-images">';
         streetViewImages.forEach(url => {
-            imagesHtml += `<img src="http://111.230.109.230:9666/${url}" alt="Street View" class="popup-street-view-image">`;
+            imagesHtml += `<div class="swiper-slide"><img src="http://111.230.109.230:9666/${url}" alt="Street View"></div>`;
         });
-        imagesHtml += '</div>';
     } else {
         imagesHtml = '<p>No street view images available.</p>';
     }
+    imagesHtml += '</div><div class="swiper-pagination"></div></div>';
 
     const content = `
     <div class="popup-content">
         <div class="popup-header">
             Region #1254, Beijing (<u>with ${streetViewImages.length} street-view images</u>).
         </div>
-       <div class="popup-street-view">
+        <div class="popup-street-view">
             ${imagesHtml}
         </div>
         <div class="data">

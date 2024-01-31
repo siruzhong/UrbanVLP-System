@@ -53,10 +53,37 @@ map.on('click', function (e) {
             new mapboxgl.Popup({offset: [0, -125], keepInView: false})
                 .setLngLat(stationWithinBounds.geometry.coordinates)
                 .setHTML(generatePopupContent(data, lngLat))
-                .addTo(map);
+                .addTo(map)
+                .on('open', () => {
+                    // Initialize Swiper after the popup is opened
+                    initSwiper();
+                });
+
         });
         generateClickBoundary(stationWithinBounds)
     }
 });
+
+// Swiper initialization function
+function initSwiper() {
+    // Make sure this code runs after the popup's HTML is part of the DOM
+    setTimeout(() => {
+        new Swiper('.swiper-container', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            // Ensure Swiper loads correctly in hidden elements if necessary
+            observer: true,
+            observeParents: true,
+        });
+    }, 100); // You might need to adjust the timeout
+}
+
 
 

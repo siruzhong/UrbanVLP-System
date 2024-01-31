@@ -3436,3 +3436,39 @@ strong {
     border-radius: 3px;  /* 微弱的圆角 */
     display: inline-block;  /* 使背景色只包围文本 */
 }
+
+/* 添加自定义样式以覆盖 Swiper 的默认样式 */
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    width: auto; /* 或者 '100%' 如果你希望宽度充满容器 */
+    /*height: 100%; !* 根据容器调整，但可能会导致图片不按比例缩放 *!*/
+    max-width: 100%; /* 确保图片不超过容器宽度 */
+    max-height: 100%; /* 确保图片不超过容器高度 */
+    object-fit: contain; /* 保持图片比例，可能会导致图片不填满整个容器 */
+}
+
+/* 如果需要，可以添加更多的自定义样式 */
