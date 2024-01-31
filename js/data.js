@@ -204,6 +204,7 @@ function generatePopupContent(data, lnglat) {
     if (streetViewImageNames.length > 0) {
         streetViewImageNames.forEach((url, index) => {
             const imageDescription = streetViewImageCaptions[index] || 'No description available.';
+            const escapedImageDescription = imageDescription.replace(/"/g, '&quot;');
             // Truncate the description if it's too long
             const maxLength = 180; // Max characters to display
             const truncatedDescription = imageDescription.length > maxLength
@@ -211,7 +212,7 @@ function generatePopupContent(data, lnglat) {
                 : imageDescription;
             imagesHtml += `
             <div class="swiper-slide">
-                <img src="http://111.230.109.230:9666/${url}" alt="Street View">
+                <img src="http://111.230.109.230:9666/${url}" alt="Street View" title="${escapedImageDescription}">
                 <div class="image-description" title="${imageDescription}">${truncatedDescription}</div>
             </div>
         `;
@@ -231,17 +232,31 @@ function generatePopupContent(data, lnglat) {
         </div>
         <div class="data">
             <div class="data-item">
-                <img src="assets/carbon.png" alt="Carbon Icon" class="icon">
-                <strong style="color: green">Carbon: </strong><span style="margin-right: 4px">${carbonEmissions}</span> tons
+                <img src="assets/carbon.png" alt="Carbon Emission" class="icon">
+                <strong style="color: green">CO2e: </strong><span style="margin-right: 4px">${carbonEmissions}</span> tons
             </div>
             <div class="data-item">
-                <img src="assets/population.png" alt="Population Icon" class="icon">
-                <strong style="color: purple">Population: </strong><span style="margin-right: 4px">${population}</span> units
+                <img src="assets/population.png" alt="Population" class="icon">
+                <strong style="color: purple">Pop: </strong><span style="margin-right: 4px">${population}</span> units
             </div>
             <div class="data-item">
-                <img src="assets/gdp.png" alt="GDP Icon" class="icon">
-                <strong style="color: blue">GDP: </strong><span style="margin-right: 4px">${gdp}</span> million
-            </div>                
+                <img src="assets/gdp.png" alt="GDP" class="icon">
+                <strong style="color: #0a59d0">GDP: </strong><span style="margin-right: 4px">${gdp}</span> million
+            </div>                            
+        </div>        
+        <div class="data">
+            <div class="data-item">
+                <img src="assets/nlight.png" alt="Night Light" class="icon">
+                <strong style="color: #dc9004">NLight: </strong><span style="margin-right: 4px">${carbonEmissions}</span> tons
+            </div>
+            <div class="data-item">
+                <img src="assets/hprice.png" alt="House Price" class="icon">
+                <strong style="color: #ea4141">HPrice: </strong><span style="margin-right: 4px">${population}</span> units
+            </div>
+            <div class="data-item">
+                <img src="assets/poi.png" alt="POI" class="icon">
+                <strong style="color: #894ec2">POI: </strong><span style="margin-right: 4px">${gdp}</span> million
+            </div>                            
         </div>
         <div class="popup-caption">
             <strong style="color: red">Text Description: </strong> ${caption}
