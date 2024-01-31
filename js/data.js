@@ -278,15 +278,15 @@ function generatePopupContent(data, lnglat) {
         <div class="data">
             <div class="data-item">
                 <img src="assets/nlight.png" alt="Night Light" class="icon">
-                <strong style="color: #dc9004; font-size: 16px">NLight: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} tons</span> 
+                <strong style="color: #dc9004; font-size: 16px">NLight: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} watts</span> 
             </div>
             <div class="data-item">
                 <img src="assets/hprice.png" alt="House Price" class="icon">
-                <strong style="color: #ea4141; font-size: 16px">HPrice: </strong><span style="margin-right: 4px; font-size: 16px">${population} units</span> 
+                <strong style="color: #ea4141; font-size: 16px">HPrice: </strong><span style="margin-right: 4px; font-size: 16px">${population} cny</span> 
             </div>
             <div class="data-item">
                 <img src="assets/poi.png" alt="POI" class="icon">
-                <strong style="color: #894ec2; font-size: 16px">POI: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} million</span> 
+                <strong style="color: #894ec2; font-size: 16px">POI: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} counts</span> 
             </div>                            
         </div>
         <div class="popup-caption">
