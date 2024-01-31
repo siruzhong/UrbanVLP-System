@@ -224,6 +224,7 @@ function generatePopupContent(data, lnglat) {
 
     const content = `
     <div class="popup-content">
+        <div></div>
         <div class="popup-header">
             Region #1254, Beijing (<u>with ${streetViewImageNames.length} street-view images</u>).
         </div>
@@ -259,7 +260,7 @@ function generatePopupContent(data, lnglat) {
             </div>                            
         </div>
         <div class="popup-caption">
-            <strong style="color: red">Text Description: </strong> ${caption}
+            <strong style="color: rgb(229,46,89)">Satellite Image Region Descrption: </strong> ${caption}
         </div>
         <p class="popup-description">
             <i class="fas fa-info-circle"></i>

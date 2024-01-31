@@ -3381,6 +3381,7 @@ strong {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .data-item {
@@ -3428,13 +3429,14 @@ strong {
 
 .popup-header {
     font-weight: bold;
-    font-size: 16px; /* 减小字体大小以融入整体设计 */
+    font-size: 18px; /* 减小字体大小以融入整体设计 */
     color: #333; /* 深色以融入整体设计 */
     margin-bottom: 12px;
     background-color: #f6f6f6; /* 淡色背景 */
     padding: 4px 10px; /* 适当的内部间距 */
     border-radius: 3px; /* 微弱的圆角 */
     display: inline-block; /* 使背景色只包围文本 */
+    text-align: center; /* 文本水平居中 */
 }
 
 /* 添加自定义样式以覆盖 Swiper 的默认样式 */
