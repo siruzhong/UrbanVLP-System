@@ -190,6 +190,35 @@ function generateClickBoundary(station) {
     });
 }
 
+
+function getNearbyPlaces(lnglat) {
+    var mapboxAccessToken = 'pk.eyJ1Ijoic2lydXpob25nIiwiYSI6ImNsamJpNXdvcTFoc24zZG14NWU5azdqcjMifQ.W_2t66prRsaq8lZMSdfKzg'; // 替换为你的Mapbox Access Token
+    var types = 'poi'; // 指定你想搜索的类型为兴趣点（POI）
+    var limit = 3; // 限制返回结果数量
+    var url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lnglat.lng},${lnglat.lat}.json?` +
+        `access_token=${mapboxAccessToken}&limit=${limit}&types=${types}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features && Array.isArray(data.features)) {
+                var places = data.features.map(feature => feature.text).slice(0, 3);
+                updatePopupContent(places);
+            } else {
+                console.error('Received data is not an array:', data);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function updatePopupContent(places) {
+    if (Array.isArray(places)) {
+        document.querySelector('#placesList').innerHTML = '<strong style="color: #007bff; ">Popular POIs</strong>: ' + places.join(', ');
+    } else {
+        console.error('places is not an array:', places);
+    }
+}
+
 // 生成弹出框内容
 function generatePopupContent(data, lnglat) {
     const carbonEmissions = data.carbon_emissions.toFixed(2); // 保留两位小数
@@ -198,6 +227,7 @@ function generatePopupContent(data, lnglat) {
     const caption = data.caption
     const streetViewImageNames = data.streetview_img_names
     const streetViewImageCaptions = data.streetview_img_captions
+    getNearbyPlaces(lnglat)
 
     // Build the HTML for street view images
     let imagesHtml = '<div class="street-view-images"><div class="swiper-container"><div class="swiper-wrapper">';
@@ -266,7 +296,7 @@ function generatePopupContent(data, lnglat) {
             <i class="fas fa-info-circle"></i>
             This is a 1km x 1km region centered around 
             <strong>coordinate (${lnglat.lng.toFixed(3)}&deg;E, ${lnglat.lat.toFixed(3)}&deg;N)</strong>
-            <u style="margin-left: 30px">Popular POIs</u>: Beijing Hospital, Dongdan Park, Dongdan Sports Center etc.
+            <div id="placesList" style="font-size: 18px; color: #198cff"></div>
         </p>
     </div>
 `;
