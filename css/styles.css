@@ -3364,6 +3364,19 @@ strong {
     width: 700px; /* 或者你需要的宽度 */
 }
 
+.popup-street-view-image {
+    max-width: 100%; /* 限制图片最大宽度为容器宽度 */
+    height: auto; /* 保持图片原始比例 */
+    display: block; /* 防止图片下方有空隙 */
+    margin-bottom: 10px; /* 图片间距 */
+    border-radius: 4px; /* 可选：为图片添加圆角 */
+}
+
+.street-view-images {
+    overflow-x: auto; /* 横向滚动条 */
+    white-space: nowrap; /* 确保图片横向排列 */
+}
+
 .data {
     display: flex;
     justify-content: space-between;

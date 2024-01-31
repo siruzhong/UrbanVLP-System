@@ -189,10 +189,27 @@ function generatePopupContent(data, lnglat) {
     const gdp = data.gdp.toFixed(2); // 保留两位小数
     const caption = data.caption
 
+    streetViewImages = ["http://111.230.109.230:9666/50877_116.449111,40.09969_201308_280.06.jpg", "http://111.230.109.230:9666/50870_116.452766,40.097876_201308_29.46.jpg"]
+    // Build the HTML for street view images
+    let imagesHtml = '';
+    if (streetViewImages.length > 0) {
+        imagesHtml = '<div class="street-view-images">';
+        streetViewImages.forEach(url => {
+            imagesHtml += `<img src="${url}" alt="Street View" class="popup-street-view-image">`;
+        });
+        imagesHtml += '</div>';
+    } else {
+        imagesHtml = '<p>No street view images available.</p>';
+    }
+
     const content = `
     <div class="popup-content">
         <div class="popup-header">
             Region #1254, Beijing
+        </div>
+       <div class="popup-street-view">
+            <h4>Street View Images</h4>
+            ${imagesHtml}
         </div>
         <div class="data">
             <div class="data-item">
