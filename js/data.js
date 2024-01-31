@@ -74,12 +74,87 @@ function addStationsLayer() {
 
             // 添加数据图层，使用基于PM2.5值的动态圆圈颜色
             map.addLayer({
-                id: '1085-stations-1cyyg4',
+                id: '1085-stations-1cyyg42',
                 type: 'circle',
                 source: 'stations',
                 paint: {
                     'circle-radius': 5,
                     'circle-color': 'rgb(30,144,255)',
+                    'circle-stroke-color': 'white',
+                    'circle-stroke-width': 1
+                },
+            });
+        }
+    });
+}
+
+
+function csvToGeoJSON2(fileUrl, callback) {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: []
+    };
+
+    // 使用Fetch API获取CSV文件
+    fetch(fileUrl)
+        .then(response => response.text())
+        .then(csvData => {
+            // 使用PapaParse解析CSV数据
+            Papa.parse(csvData, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    results.data.forEach(row => {
+                        const coordinates = row['coordinate'].split(',');
+                        const latitude = parseFloat(coordinates[1]);
+                        const longitude = parseFloat(coordinates[0]);
+
+                        if (!isNaN(latitude) && !isNaN(longitude)) {
+                            const feature = {
+                                type: 'Feature',
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [longitude, latitude]
+                                },
+                                properties: {
+                                    streetview_img_name: row['streetview_img_name'],
+                                    streetview_img_caption: row['caption']
+                                }
+                            };
+                            geojson.features.push(feature);
+                        }
+                    });
+                    callback(null, geojson);
+                },
+                error: function (error) {
+                    callback(error, null);
+                }
+            });
+        })
+        .catch(error => {
+            callback(error, null);
+        });
+}
+
+// 添加站点数据图层
+function addStationsLayer2() {
+    // 将CSV数据转换为GeoJSON
+    csvToGeoJSON2('./data/integrated_streetview_captions_with_coordinates.csv', (error, geojsonData) => {
+        if (error) {
+            console.error('Error:', error);
+        } else {
+            map.addSource('stations2', {
+                type: 'geojson',
+                data: geojsonData
+            });
+
+            map.addLayer({
+                id: '1085-stations-2nd-layer',
+                type: 'circle',
+                source: 'stations2',
+                paint: {
+                    'circle-radius': 5,
+                    'circle-color': 'rgb(255,204,0)',
                     'circle-stroke-color': 'white',
                     'circle-stroke-width': 1
                 },

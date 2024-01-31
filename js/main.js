@@ -13,6 +13,7 @@ const map = new mapboxgl.Map({
 // 当地图加载完成时执行
 map.on('load', function () {
     addStationsLayer(); // 添加站点数据层
+    addStationsLayer2()
 });
 
 // 创建弹出窗口
