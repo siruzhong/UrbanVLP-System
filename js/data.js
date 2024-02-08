@@ -38,6 +38,9 @@ function csvToGeoJSON(fileUrl, callback) {
                                     carbon_emissions: parseFloat(row['carbon_emissions (ton)']),
                                     population: parseInt(row['population (unit)']),
                                     gdp: parseFloat(row['gdp (million yuan)']),
+                                    nightlight: parseFloat(row['nightlight']),
+                                    poi: row['poi'],
+                                    houseprice: parseFloat(row['houseprice']),
                                     caption: row['caption'],
                                     streetview_img_names: streetviewImgNames,
                                     streetview_img_captions: streetViewImageCaptions
@@ -62,7 +65,7 @@ function csvToGeoJSON(fileUrl, callback) {
 // 添加站点数据图层
 function addStationsLayer() {
     // 将CSV数据转换为GeoJSON
-    csvToGeoJSON('./data/integrated_all.csv', (error, geojsonData) => {
+    csvToGeoJSON('./data/integrated_all_updated.csv', (error, geojsonData) => {
         if (error) {
             console.error('Error:', error);
         } else {
@@ -194,6 +197,9 @@ function fetchDataForLocation(lngLat, station, callback) {
         carbon_emissions: station.properties.carbon_emissions,
         population: station.properties.population,
         gdp: station.properties.gdp,
+        houseprice: station.properties.houseprice,
+        poi: station.properties.poi,
+        nightlight: station.properties.nightlight,
         caption: station.properties.caption,
         streetview_img_names: station.properties.streetview_img_names,
         streetview_img_captions: station.properties.streetview_img_captions
@@ -337,6 +343,9 @@ function generatePopupContent(data, lnglat) {
     const carbonEmissions = data.carbon_emissions.toFixed(2); // 保留两位小数
     const population = data.population.toFixed(0); // 保留零位小数
     const gdp = data.gdp.toFixed(2); // 保留两位小数
+    const housePrice = data.houseprice.toFixed(2);
+    const nightLight = data.nightlight.toFixed(2);
+    const poi = data.poi; // 假设data.poi是一个JSON字符串
     const caption = data.caption
     const streetViewImageNames = data.streetview_img_names
     const streetViewImageCaptions = data.streetview_img_captions
@@ -349,7 +358,7 @@ function generatePopupContent(data, lnglat) {
             const imageDescription = streetViewImageCaptions[index] || 'No description available.';
             const escapedImageDescription = imageDescription.replace(/"/g, '&quot;');
             // Truncate the description if it's too long
-            const maxLength = 150; // Max characters to display
+            const maxLength = 250; // Max characters to display
             const truncatedDescription = imageDescription.length > maxLength
                 ? imageDescription.substring(0, maxLength) + '...'
                 : imageDescription;
@@ -374,34 +383,59 @@ function generatePopupContent(data, lnglat) {
         <div class="popup-street-view">
             ${imagesHtml}
         </div>
-        <div class="data">
-            <div class="data-item">
-                <img src="assets/carbon.png" alt="Carbon Emission" class="icon">
-                <strong style="color: green; font-size: 16px">CO2e: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} tons</span> 
-            </div>
-            <div class="data-item">
-                <img src="assets/population.png" alt="Population" class="icon">
-                <strong style="color: purple; font-size: 16px">Pop: </strong><span style="margin-right: 4px; font-size: 16px">${population} units</span> 
-            </div>
-            <div class="data-item">
-                <img src="assets/gdp.png" alt="GDP" class="icon">
-                <strong style="color: #0a59d0; font-size: 16px">GDP: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} million</span> 
-            </div>                            
-        </div>        
-        <div class="data">
-            <div class="data-item">
-                <img src="assets/nlight.png" alt="Night Light" class="icon">
-                <strong style="color: #dc9004; font-size: 16px">NLight: </strong><span style="margin-right: 4px; font-size: 16px">${carbonEmissions} watts</span> 
-            </div>
-            <div class="data-item">
-                <img src="assets/hprice.png" alt="House Price" class="icon">
-                <strong style="color: #ea4141; font-size: 16px">HPrice: </strong><span style="margin-right: 4px; font-size: 16px">${population} cny</span> 
-            </div>
-            <div class="data-item">
-                <img src="assets/poi.png" alt="POI" class="icon">
-                <strong style="color: #894ec2; font-size: 16px">POI: </strong><span style="margin-right: 4px; font-size: 16px">${gdp} counts</span> 
-            </div>                            
+<div class="data" style="display: flex; justify-content: space-between;">
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/carbon.png" alt="Carbon Emission" class="icon" style="margin-right: 4px;">
+            <strong style="color: green; font-size: 16px">CO2e: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${carbonEmissions} tons">${carbonEmissions} tons</span>
         </div>
+    </div>
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/population.png" alt="Population" class="icon" style="margin-right: 4px;">
+            <strong style="color: purple; font-size: 16px">Pop: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${population} units">${population} units</span>
+        </div>
+    </div>
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/gdp.png" alt="GDP" class="icon" style="margin-right: 4px;">
+            <strong style="color: #0a59d0; font-size: 16px">GDP: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${gdp} million">${gdp} million</span>
+        </div>
+    </div>
+</div>
+<div class="data" style="display: flex; justify-content: space-between;">
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/nlight.png" alt="Night Light" class="icon" style="margin-right: 4px;">
+            <strong style="color: #dc9004; font-size: 16px">NLight: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${nightLight} nw/cm^2/sr">${nightLight} nw/cm^2/sr</span>
+        </div>
+    </div>
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/hprice.png" alt="House Price" class="icon" style="margin-right: 4px;">
+            <strong style="color: #ea4141; font-size: 16px">HPrice: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${housePrice} cny/m^2">${housePrice} cny/m^2</span>
+        </div>
+    </div>
+    <div class="data-item" style="flex: 1; overflow: hidden;">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/poi.png" alt="POI" class="icon" style="margin-right: 4px;">
+            <strong style="color: #894ec2; font-size: 16px">POI: </strong>
+            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${poi} counts">${poi}</span>
+        </div>
+    </div>
+</div>
+
         <div class="popup-caption">
             <strong style="color: rgb(229,46,89); font-size: 16px">Satellite Image Region Descrption: </strong> ${caption}
         </div>
@@ -409,7 +443,7 @@ function generatePopupContent(data, lnglat) {
             <i class="fas fa-info-circle"></i>
             This is a 1km x 1km region centered around 
             <strong>coordinate (${lnglat.lng.toFixed(3)}&deg;E, ${lnglat.lat.toFixed(3)}&deg;N)</strong>
-            <div id="placesList" style="font-size: 14px; color: #198cff"></div>
+            <div id="placesList" style="font-size: 16px; color: #198cff"></div>
         </p>
     </div>
 `;
