@@ -340,11 +340,11 @@ function updatePopupContent(places) {
 
 // 生成弹出框内容
 function generatePopupContent(data, lnglat) {
-    const carbonEmissions = data.carbon_emissions.toFixed(2); // 保留两位小数
+    const carbonEmissions = data.carbon_emissions.toFixed(1); // 保留两位小数
     const population = data.population.toFixed(0); // 保留零位小数
-    const gdp = data.gdp.toFixed(2); // 保留两位小数
-    const housePrice = data.houseprice.toFixed(2);
-    const nightLight = data.nightlight.toFixed(2);
+    const gdp = data.gdp.toFixed(1); // 保留两位小数
+    const housePrice = data.houseprice.toFixed(1);
+    const nightLight = data.nightlight.toFixed(1);
     const poi = data.poi; // 假设data.poi是一个JSON字符串
     const caption = data.caption
     const streetViewImageNames = data.streetview_img_names
@@ -388,24 +388,27 @@ function generatePopupContent(data, lnglat) {
         <div style="display: flex; align-items: center;">
             <img src="assets/carbon.png" alt="Carbon Emission" class="icon" style="margin-right: 4px;">
             <strong style="color: green; font-size: 16px">CO2e: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
-                  title="${carbonEmissions} tons">${carbonEmissions} tons</span>
+            <button id="carbonButton" onclick="toggleDataVisibility('carbon')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="carbonValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${carbonEmissions} tons">&nbsp;${carbonEmissions} tons</span>
         </div>
     </div>
     <div class="data-item" style="flex: 1; overflow: hidden;">
         <div style="display: flex; align-items: center;">
             <img src="assets/population.png" alt="Population" class="icon" style="margin-right: 4px;">
             <strong style="color: purple; font-size: 16px">Pop: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
-                  title="${population} units">${population} units</span>
+            <button id="populationButton" onclick="toggleDataVisibility('population')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="populationValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${population} units">&nbsp;${population} units</span>
         </div>
     </div>
     <div class="data-item" style="flex: 1; overflow: hidden;">
         <div style="display: flex; align-items: center;">
             <img src="assets/gdp.png" alt="GDP" class="icon" style="margin-right: 4px;">
             <strong style="color: #0a59d0; font-size: 16px">GDP: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
-                  title="${gdp} million">${gdp} million</span>
+            <button id="gdpButton" onclick="toggleDataVisibility('gdp')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="gdpValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                  title="${gdp} million">&nbsp;${gdp} million</span>
         </div>
     </div>
 </div>
@@ -414,24 +417,27 @@ function generatePopupContent(data, lnglat) {
         <div style="display: flex; align-items: center;">
             <img src="assets/nlight.png" alt="Night Light" class="icon" style="margin-right: 4px;">
             <strong style="color: #dc9004; font-size: 16px">NLight: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
-                  title="${nightLight} nw/cm^2/sr">${nightLight} nw/cm^2/sr</span>
+            <button id="nlightButton" onclick="toggleDataVisibility('nlight')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="nlightValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${nightLight} nw/cm²/sr">&nbsp;${nightLight} nw/cm²/sr</span>
         </div>
     </div>
     <div class="data-item" style="flex: 1; overflow: hidden;">
         <div style="display: flex; align-items: center;">
             <img src="assets/hprice.png" alt="House Price" class="icon" style="margin-right: 4px;">
             <strong style="color: #ea4141; font-size: 16px">HPrice: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
-                  title="${housePrice} cny/m^2">${housePrice} cny/m^2</span>
+            <button id="hpriceButton" onclick="toggleDataVisibility('hprice')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="hpriceValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${housePrice} cny/m^2">&nbsp;${housePrice} cny/m²</span>
         </div>
     </div>
     <div class="data-item" style="flex: 1; overflow: hidden;">
         <div style="display: flex; align-items: center;">
             <img src="assets/poi.png" alt="POI" class="icon" style="margin-right: 4px;">
             <strong style="color: #894ec2; font-size: 16px">POI: </strong>
-            <span style="font-size: 16px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
-                  title="${poi} counts">${poi}</span>
+            <button id="poiButton" onclick="toggleDataVisibility('poi')" style="background-color: #efefef; color: black; height: 25px; padding: 2px 5px 2px 5px; border: 1px solid gray">Prediction</button>
+            <span id="poiValue" style="font-size: 16px; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" 
+                  title="${poi} counts">&nbsp;${poi}</span>
         </div>
     </div>
 </div>
@@ -449,4 +455,17 @@ function generatePopupContent(data, lnglat) {
 `;
 
     return content;
+}
+
+
+function toggleDataVisibility(dataKey) {
+    var valueSpan = document.getElementById(dataKey + 'Value');
+    var button = document.getElementById(dataKey + 'Button');
+    if (valueSpan.style.display === 'none') {
+        valueSpan.style.display = 'inline';
+        button.textContent = 'Hide';
+    } else {
+        valueSpan.style.display = 'none';
+        button.textContent = 'Prediction';
+    }
 }
